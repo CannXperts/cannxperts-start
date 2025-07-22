@@ -199,6 +199,14 @@ export const getListingImageUrl = (images?: string[]): string => {
 };
 
 export const isListingFeatured = (listing: MarketplaceListing): boolean => {
-  return listing.title.toLowerCase().includes('featured') || 
-         listing.salesPrice && parseInt(listing.salesPrice.replace(/[^0-9]/g, '')) > 500000;
+  if (listing.title.toLowerCase().includes('featured')) {
+    return true;
+  }
+  
+  if (listing.salesPrice) {
+    const priceNumber = parseInt(listing.salesPrice.replace(/[^0-9]/g, ''));
+    return priceNumber > 500000;
+  }
+  
+  return false;
 };
