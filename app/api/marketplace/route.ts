@@ -35,8 +35,9 @@ export async function GET(request: NextRequest) {
     console.error('API proxy error:', error)
     
     // Add CORS headers to the error response
+    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
     const response = NextResponse.json(
-      { error: `Failed to fetch marketplace data: ${error.message}` },
+      { error: `Failed to fetch marketplace data: ${errorMessage}` },
       { status: 500 }
     )
     
