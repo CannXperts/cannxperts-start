@@ -67,6 +67,7 @@ export default function HomePage() {
               <div className="hidden md:ml-10 md:flex md:space-x-8">
                 <a href="/" className="text-primary-900 hover:text-compliance-600 px-3 py-2 text-sm font-medium transition-smooth">Home</a>
                 <a href="/services" className="text-primary-600 hover:text-compliance-600 px-3 py-2 text-sm font-medium transition-smooth">Services</a>
+                <a href="/marketplace" className="text-primary-600 hover:text-compliance-600 px-3 py-2 text-sm font-medium transition-smooth">Marketplace</a>
                 <a href="/about" className="text-primary-600 hover:text-compliance-600 px-3 py-2 text-sm font-medium transition-smooth">About</a>
                 <a href="/contact" className="text-primary-600 hover:text-compliance-600 px-3 py-2 text-sm font-medium transition-smooth">Contact</a>
               </div>
