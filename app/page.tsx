@@ -43,10 +43,10 @@ export default function HomePage() {
                 <h1 className="text-2xl font-bold text-cannabis-600">CannXperts</h1>
               </div>
               <div className="hidden md:ml-6 md:flex md:space-x-8">
-                <a href="#" className="text-gray-900 hover:text-cannabis-600 px-3 py-2 text-sm font-medium">Home</a>
-                <a href="#businesses" className="text-gray-700 hover:text-cannabis-600 px-3 py-2 text-sm font-medium">Businesses for Sale</a>
-                <a href="#services" className="text-gray-700 hover:text-cannabis-600 px-3 py-2 text-sm font-medium">Services</a>
-                <a href="#contact" className="text-gray-700 hover:text-cannabis-600 px-3 py-2 text-sm font-medium">Contact</a>
+                <a href="/" className="text-gray-900 hover:text-cannabis-600 px-3 py-2 text-sm font-medium">Home</a>
+                <a href="/businesses" className="text-gray-700 hover:text-cannabis-600 px-3 py-2 text-sm font-medium">Businesses for Sale</a>
+                <a href="/sell" className="text-gray-700 hover:text-cannabis-600 px-3 py-2 text-sm font-medium">Sell Business</a>
+                <a href="/contact" className="text-gray-700 hover:text-cannabis-600 px-3 py-2 text-sm font-medium">Contact</a>
               </div>
             </div>
             <div className="flex items-center">
@@ -69,12 +69,12 @@ export default function HomePage() {
               Professional cannabis business brokerage services. Buy and sell dispensaries, cultivation facilities, and processing operations with expert guidance.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="bg-white text-cannabis-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 btn-cannabis transition-all">
+              <a href="/businesses" className="bg-white text-cannabis-600 px-8 py-4 rounded-lg font-semibold text-lg hover:bg-gray-100 btn-cannabis transition-all text-center">
                 View Businesses for Sale
-              </button>
-              <button className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-cannabis-600 transition-all">
+              </a>
+              <a href="/sell" className="border-2 border-white text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-white hover:text-cannabis-600 transition-all text-center">
                 Sell Your Business
-              </button>
+              </a>
             </div>
           </div>
         </div>
@@ -280,9 +280,9 @@ export default function HomePage() {
             <div>
               <h4 className="text-lg font-semibold mb-4">Quick Links</h4>
               <ul className="space-y-2 text-gray-300">
-                <li><a href="#" className="hover:text-cannabis-400">Businesses for Sale</a></li>
-                <li><a href="#" className="hover:text-cannabis-400">Sell Your Business</a></li>
-                <li><a href="#" className="hover:text-cannabis-400">Market Reports</a></li>
+                <li><a href="/businesses" className="hover:text-cannabis-400">Businesses for Sale</a></li>
+                <li><a href="/sell" className="hover:text-cannabis-400">Sell Your Business</a></li>
+                <li><a href="/contact" className="hover:text-cannabis-400">Contact Us</a></li>
                 <li><a href="#" className="hover:text-cannabis-400">Resources</a></li>
               </ul>
             </div>
