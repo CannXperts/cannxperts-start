@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { PhoneIcon, EnvelopeIcon, MapPinIcon, ClockIcon } from '@heroicons/react/24/outline'
+import { PhoneIcon, EnvelopeIcon, ClockIcon, MapPinIcon, ShieldCheckIcon, UserGroupIcon } from '@heroicons/react/24/outline'
 
 export default function ContactPage() {
   const [formData, setFormData] = useState({
@@ -9,7 +9,8 @@ export default function ContactPage() {
     lastName: '',
     email: '',
     phone: '',
-    interest: '',
+    company: '',
+    service: '',
     message: ''
   })
 
@@ -22,18 +23,35 @@ export default function ContactPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle form submission
     console.log('Form submitted:', formData)
   }
+
+  const services = [
+    {
+      title: 'License Management',
+      description: 'Professional license management and regulatory navigation support',
+      icon: ShieldCheckIcon
+    },
+    {
+      title: 'Compliance Inspections',
+      description: 'Comprehensive facility audits and compliance assessments',
+      icon: UserGroupIcon
+    },
+    {
+      title: 'Receivership Services',
+      description: 'Court-appointed receivership and asset management',
+      icon: MapPinIcon
+    }
+  ]
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <section className="bg-white">
+      <section className="bg-white shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">Contact CannXperts</h1>
-          <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-            Ready to buy or sell a cannabis business? Our experienced team is here to provide expert guidance throughout your transaction.
+          <h1 className="text-4xl md:text-5xl font-bold text-primary-900 mb-6">Contact CannXperts</h1>
+          <p className="text-xl text-professional max-w-3xl mx-auto leading-relaxed">
+            Ready to ensure your cannabis business stays compliant? Our experienced compliance team is here to provide expert regulatory guidance and support.
           </p>
         </div>
       </section>
@@ -42,204 +60,248 @@ export default function ContactPage() {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
           {/* Contact Information */}
           <div>
-            <h2 className="text-2xl font-bold text-gray-900 mb-8">Get in Touch</h2>
+            <h2 className="text-3xl font-bold text-primary-900 mb-8">Get Expert Compliance Support</h2>
             
-            <div className="space-y-8">
+            <div className="space-y-8 mb-12">
               {/* Phone */}
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-cannabis-100 rounded-lg flex items-center justify-center">
-                  <PhoneIcon className="w-6 h-6 text-cannabis-600" />
+              <div className="flex items-start gap-6">
+                <div className="w-14 h-14 bg-compliance-100 rounded-xl flex items-center justify-center">
+                  <PhoneIcon className="w-7 h-7 text-compliance-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">Phone</h3>
-                  <p className="text-gray-600 mb-2">(555) 123-4567</p>
-                  <p className="text-sm text-gray-500">Mon-Fri 9AM-6PM PST</p>
+                  <h3 className="text-xl font-semibold text-primary-900 mb-2">Phone Consultation</h3>
+                  <p className="text-lg text-professional mb-2">(555) 123-4567</p>
+                  <p className="text-primary-600">Available Mon-Fri 9AM-6PM PST</p>
                 </div>
               </div>
 
               {/* Email */}
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-cannabis-100 rounded-lg flex items-center justify-center">
-                  <EnvelopeIcon className="w-6 h-6 text-cannabis-600" />
+              <div className="flex items-start gap-6">
+                <div className="w-14 h-14 bg-compliance-100 rounded-xl flex items-center justify-center">
+                  <EnvelopeIcon className="w-7 h-7 text-compliance-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">Email</h3>
-                  <p className="text-gray-600 mb-2">info@cannxperts.ai</p>
-                  <p className="text-sm text-gray-500">We respond within 24 hours</p>
+                  <h3 className="text-xl font-semibold text-primary-900 mb-2">Email Support</h3>
+                  <p className="text-lg text-professional mb-2">info@cannxperts.ai</p>
+                  <p className="text-primary-600">Response within 24 hours</p>
                 </div>
               </div>
 
               {/* Office Hours */}
-              <div className="flex items-start gap-4">
-                <div className="w-12 h-12 bg-cannabis-100 rounded-lg flex items-center justify-center">
-                  <ClockIcon className="w-6 h-6 text-cannabis-600" />
+              <div className="flex items-start gap-6">
+                <div className="w-14 h-14 bg-compliance-100 rounded-xl flex items-center justify-center">
+                  <ClockIcon className="w-7 h-7 text-compliance-600" />
                 </div>
                 <div>
-                  <h3 className="font-semibold text-gray-900 mb-1">Business Hours</h3>
-                  <div className="text-gray-600 space-y-1">
+                  <h3 className="text-xl font-semibold text-primary-900 mb-2">Business Hours</h3>
+                  <div className="text-professional space-y-1">
                     <p>Monday - Friday: 9:00 AM - 6:00 PM PST</p>
                     <p>Saturday: 10:00 AM - 2:00 PM PST</p>
-                    <p>Sunday: Closed</p>
+                    <p>Sunday: Emergency consultation only</p>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Services */}
-            <div className="mt-12 bg-white p-8 rounded-xl shadow-sm">
-              <h3 className="text-xl font-bold text-gray-900 mb-6">How We Can Help</h3>
-              <div className="space-y-4">
-                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-cannabis-600 rounded-full"></div>
-                  <span className="text-gray-700">Cannabis business brokerage</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-cannabis-600 rounded-full"></div>
-                  <span className="text-gray-700">Business valuation services</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-cannabis-600 rounded-full"></div>
-                  <span className="text-gray-700">Due diligence support</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-cannabis-600 rounded-full"></div>
-                  <span className="text-gray-700">Market analysis and research</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-cannabis-600 rounded-full"></div>
-                  <span className="text-gray-700">Compliance and regulatory guidance</span>
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-2 h-2 bg-cannabis-600 rounded-full"></div>
-                  <span className="text-gray-700">Transaction management</span>
+            {/* Services Overview */}
+            <div className="card-professional p-8">
+              <h3 className="text-2xl font-bold text-primary-900 mb-6">Our Compliance Services</h3>
+              <div className="space-y-6">
+                {services.map((service, index) => {
+                  const IconComponent = service.icon
+                  return (
+                    <div key={index} className="flex items-start gap-4">
+                      <div className="w-10 h-10 bg-compliance-100 rounded-lg flex items-center justify-center mt-1">
+                        <IconComponent className="w-5 h-5 text-compliance-600" />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-primary-900 mb-1">{service.title}</h4>
+                        <p className="text-professional text-sm">{service.description}</p>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+              <div className="mt-8">
+                <div className="border-t border-primary-200 pt-6">
+                  <div className="grid grid-cols-2 gap-6 text-center">
+                    <div>
+                      <div className="text-2xl font-bold text-compliance-600">150+</div>
+                      <div className="text-sm text-professional">Clients Served</div>
+                    </div>
+                    <div>
+                      <div className="text-2xl font-bold text-compliance-600">Since 2018</div>
+                      <div className="text-sm text-professional">Industry Experience</div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Contact Form */}
-          <div className="bg-white p-8 rounded-xl shadow-lg">
-            <h3 className="text-2xl font-bold text-gray-900 mb-6">Send Us a Message</h3>
+          <div className="card-professional p-8">
+            <h3 className="text-2xl font-bold text-primary-900 mb-6">Request Compliance Consultation</h3>
             
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">First Name</label>
+                  <label className="block text-sm font-medium text-primary-700 mb-2">First Name *</label>
                   <input
                     type="text"
                     name="firstName"
                     value={formData.firstName}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cannabis-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-primary-300 rounded-lg focus:ring-2 focus:ring-compliance-500 focus:border-transparent transition-smooth"
                     required
                   />
                 </div>
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Last Name</label>
+                  <label className="block text-sm font-medium text-primary-700 mb-2">Last Name *</label>
                   <input
                     type="text"
                     name="lastName"
                     value={formData.lastName}
                     onChange={handleInputChange}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cannabis-500 focus:border-transparent"
+                    className="w-full px-4 py-3 border border-primary-300 rounded-lg focus:ring-2 focus:ring-compliance-500 focus:border-transparent transition-smooth"
                     required
                   />
                 </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                <label className="block text-sm font-medium text-primary-700 mb-2">Email Address *</label>
                 <input
                   type="email"
                   name="email"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cannabis-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-primary-300 rounded-lg focus:ring-2 focus:ring-compliance-500 focus:border-transparent transition-smooth"
                   required
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cannabis-500 focus:border-transparent"
-                  required
-                />
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-primary-700 mb-2">Phone Number *</label>
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-primary-300 rounded-lg focus:ring-2 focus:ring-compliance-500 focus:border-transparent transition-smooth"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-primary-700 mb-2">Company Name</label>
+                  <input
+                    type="text"
+                    name="company"
+                    value={formData.company}
+                    onChange={handleInputChange}
+                    className="w-full px-4 py-3 border border-primary-300 rounded-lg focus:ring-2 focus:ring-compliance-500 focus:border-transparent transition-smooth"
+                  />
+                </div>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">I'm Interested In</label>
+                <label className="block text-sm font-medium text-primary-700 mb-2">Service Needed *</label>
                 <select
-                  name="interest"
-                  value={formData.interest}
+                  name="service"
+                  value={formData.service}
                   onChange={handleInputChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cannabis-500 focus:border-transparent"
+                  className="w-full px-4 py-3 border border-primary-300 rounded-lg focus:ring-2 focus:ring-compliance-500 focus:border-transparent transition-smooth"
                   required
                 >
-                  <option value="">Please select...</option>
-                  <option value="buying">Buying a Cannabis Business</option>
-                  <option value="selling">Selling My Cannabis Business</option>
-                  <option value="valuation">Business Valuation</option>
+                  <option value="">Select a service...</option>
+                  <option value="license-management">License Management</option>
+                  <option value="compliance-officer">Compliance Officer Services</option>
+                  <option value="compliance-inspection">Compliance Inspection</option>
+                  <option value="bank-insurance">Bank/Insurance Inspection</option>
+                  <option value="receivership">Receivership Services</option>
                   <option value="consultation">General Consultation</option>
-                  <option value="market-analysis">Market Analysis</option>
                   <option value="other">Other</option>
                 </select>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-gray-700 mb-2">Message</label>
+                <label className="block text-sm font-medium text-primary-700 mb-2">Message *</label>
                 <textarea
                   name="message"
                   value={formData.message}
                   onChange={handleInputChange}
                   rows={5}
-                  placeholder="Tell us about your needs, timeline, and any specific questions you have..."
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-cannabis-500 focus:border-transparent"
+                  placeholder="Please describe your compliance needs, current situation, timeline, and any specific regulatory challenges you're facing..."
+                  className="w-full px-4 py-3 border border-primary-300 rounded-lg focus:ring-2 focus:ring-compliance-500 focus:border-transparent transition-smooth"
                   required
                 ></textarea>
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-cannabis-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-cannabis-700 transition-colors"
+                className="w-full bg-compliance-600 text-white py-4 px-6 rounded-lg font-semibold text-lg hover:bg-compliance-700 btn-compliance transition-smooth"
               >
-                Send Message
+                Request Consultation
               </button>
             </form>
 
-            <div className="mt-6 p-4 bg-cannabis-50 rounded-lg">
-              <p className="text-sm text-cannabis-800">
-                <strong>Privacy Guarantee:</strong> All information is kept strictly confidential. 
-                We never share your details with third parties without your explicit consent.
+            <div className="mt-6 p-4 bg-compliance-50 rounded-lg">
+              <p className="text-sm text-compliance-800">
+                <strong>Confidentiality Guarantee:</strong> All compliance consultations are confidential. 
+                We maintain strict confidentiality standards and never share sensitive business information.
               </p>
             </div>
           </div>
         </div>
 
-        {/* FAQ Section */}
-        <div className="mt-20 bg-white rounded-xl shadow-sm p-8">
-          <h2 className="text-2xl font-bold text-gray-900 text-center mb-12">Quick Answers</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-2">How quickly do you respond?</h3>
-              <p className="text-gray-600 text-sm">We respond to all inquiries within 24 hours, typically much sooner during business hours.</p>
+        {/* Trust Indicators */}
+        <div className="mt-20">
+          <div className="card-professional p-12 text-center">
+            <h2 className="text-3xl font-bold text-primary-900 text-center mb-8">Why Cannabis Businesses Trust CannXperts</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              <div>
+                <div className="w-16 h-16 bg-compliance-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <ShieldCheckIcon className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold text-primary-900 mb-2">Proven Track Record</h3>
+                <p className="text-professional">Since 2018, we've helped hundreds of cannabis businesses achieve and maintain compliance</p>
+              </div>
+              <div>
+                <div className="w-16 h-16 bg-compliance-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <UserGroupIcon className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold text-primary-900 mb-2">Industry Recognition</h3>
+                <p className="text-professional">Trusted by regulators, law firms, and cannabis businesses across all legal markets</p>
+              </div>
+              <div>
+                <div className="w-16 h-16 bg-compliance-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <MapPinIcon className="w-8 h-8 text-white" />
+                </div>
+                <h3 className="text-xl font-semibold text-primary-900 mb-2">Comprehensive Coverage</h3>
+                <p className="text-professional">We serve all legal cannabis states with deep knowledge of local regulations</p>
+              </div>
             </div>
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-2">Do you offer free consultations?</h3>
-              <p className="text-gray-600 text-sm">Yes, we provide free initial consultations to understand your needs and explain our services.</p>
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-2">What states do you serve?</h3>
-              <p className="text-gray-600 text-sm">We serve all legal cannabis states with specialized knowledge of local regulations and markets.</p>
-            </div>
-            <div>
-              <h3 className="font-semibold text-gray-900 mb-2">Is my information confidential?</h3>
-              <p className="text-gray-600 text-sm">Absolutely. All business information and personal details are kept strictly confidential under NDAs.</p>
-            </div>
+          </div>
+        </div>
+
+        {/* Quick FAQ */}
+        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="card-professional p-6">
+            <h4 className="font-semibold text-primary-900 mb-2">How quickly can you start helping us?</h4>
+            <p className="text-professional text-sm">We typically begin compliance assessments within 48 hours of initial consultation and can provide emergency support when needed.</p>
+          </div>
+          <div className="card-professional p-6">
+            <h4 className="font-semibold text-primary-900 mb-2">Do you work with new license applicants?</h4>
+            <p className="text-professional text-sm">Yes, we provide comprehensive support for new license applications, from initial paperwork to final approval and ongoing compliance.</p>
+          </div>
+          <div className="card-professional p-6">
+            <h4 className="font-semibold text-primary-900 mb-2">What states do you serve?</h4>
+            <p className="text-professional text-sm">We provide compliance services in all legal cannabis states, with specialized knowledge of each state's unique regulatory requirements.</p>
+          </div>
+          <div className="card-professional p-6">
+            <h4 className="font-semibold text-primary-900 mb-2">Are consultations really confidential?</h4>
+            <p className="text-professional text-sm">Absolutely. All business information and compliance discussions are protected under strict confidentiality agreements.</p>
           </div>
         </div>
       </div>

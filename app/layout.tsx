@@ -1,9 +1,9 @@
 import './globals.css'
 
 export const metadata = {
-  title: 'CannXperts - Cannabis Business Marketplace',
-  description: 'Professional cannabis business brokerage and marketplace. Buy and sell cannabis businesses with expert guidance.',
-  keywords: 'cannabis business, dispensary for sale, cannabis brokerage, marijuana business marketplace',
+  title: 'CannXperts - Cannabis Regulatory Compliance Solutions',
+  description: 'Professional cannabis compliance services including license management, regulatory inspections, and receivership. Trusted by industry professionals since 2018.',
+  keywords: 'cannabis compliance, cannabis licensing, regulatory compliance, cannabis inspections, cannabis license management, cannabis receivership',
 }
 
 export default function RootLayout({
