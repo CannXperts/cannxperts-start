@@ -11,6 +11,7 @@ interface MarketplaceListing {
   location: string
   sales_price: string | null
   images: string | null
+  is_active?: boolean
 }
 
 export default function MarketplaceSection() {
@@ -62,62 +63,21 @@ export default function MarketplaceSection() {
   }
 
   const formatListingType = (type: string): string => {
-    return type === 'HAVE' ? 'For Sale' : type === 'WANT' ? 'Seeking' : 'Investment'
+    if (!type) return 'Listing'
+    switch (type.toUpperCase()) {
+      case 'HAVE': return 'For Sale'
+      case 'WANT': return 'Seeking'
+      case 'NEED': return 'Investment'
+      default: return type
+    }
   }
 
   const getListingImageUrl = (images: string | null): string => {
     return '/api/placeholder/400/300'
   }
 
-  // Real listings data from database
-  const realListings = [
-    {
-      id: 307,
-      title: 'OLCC Processor License',
-      description: 'Rare processor license available. Must show proof of approved Land Use Compatibility Statement for location.',
-      location: 'Oregon, USA',
-      price: '$30K OBO',
-      type: 'For Sale',
-      badge: 'License'
-    },
-    {
-      id: 308,
-      title: 'Retail Dispensary - Salem',  
-      description: 'Operational retail dispensary. Includes all fixtures, equipment, and product transfer. Staff interested in staying.',
-      location: 'Salem, Oregon',
-      price: '$300K',
-      type: 'For Sale',
-      badge: 'Retail'
-    },
-    {
-      id: 309,
-      title: 'Retail License - Milwaukee',
-      description: 'Dispensary license registered in Milwaukee Oregon. Location not included with license. Contact seller directly.',
-      location: 'Oregon, USA',
-      price: '',
-      type: 'For Sale',
-      badge: 'License',
-      contact: '970-389-4548'
-    },
-    {
-      id: 310,
-      title: 'Rebel Spirit Cannabis Farm',
-      description: 'Renowned cannabis farm with award-winning nationally trademarked brand. Established operation with significant growth potential.',
-      location: 'Lane County, Oregon',
-      price: '',
-      type: 'Premium',
-      badge: 'Farm & Brand'
-    },
-    {
-      id: 311,
-      title: 'OLCC Retail Store - Eugene',
-      description: 'Operational and profitable OLCC retail store in unique Eugene location. Popular area with year-round events and high patron traffic.',
-      location: 'Eugene, Oregon', 
-      price: '',
-      type: 'Featured',
-      badge: '4000 SF Store'
-    }
-  ]
+  // Filter only active listings from API data
+  const activeListings = listings.filter(listing => listing.is_active !== false)
 
   return (
     <section className="section-padding bg-primary-50">
@@ -153,24 +113,24 @@ export default function MarketplaceSection() {
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-              {realListings.map((listing) => (
+              {activeListings.map((listing) => (
                 <div key={listing.id} className="card-professional overflow-hidden">
                   <div className="relative">
                     <div className="w-full h-48 bg-gradient-to-r from-primary-600 to-compliance-600 flex items-center justify-center">
                       <div className="text-white text-center">
                         <BuildingOfficeIcon className="w-16 h-16 mx-auto mb-4" />
-                        <p className="text-sm">{listing.badge}</p>
+                        <p className="text-sm">{formatListingType(listing.type)}</p>
                       </div>
                     </div>
                     <div className="absolute top-4 left-4">
                       <span className="bg-compliance-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-                        {listing.type}
+                        {formatListingType(listing.type)}
                       </span>
                     </div>
-                    {listing.price && (
+                    {listing.sales_price && (
                       <div className="absolute top-4 right-4">
                         <span className="bg-primary-900 text-white px-3 py-1 rounded-full text-sm font-bold">
-                          {listing.price}
+                          {formatPrice(listing.sales_price)}
                         </span>
                       </div>
                     )}
@@ -188,7 +148,7 @@ export default function MarketplaceSection() {
                       </div>
                       <div className="flex items-center gap-1">
                         <BuildingOfficeIcon className="w-4 h-4" />
-                        <span>{listing.badge}</span>
+                        <span>{formatListingType(listing.type)}</span>
                       </div>
                     </div>
                     
@@ -198,10 +158,10 @@ export default function MarketplaceSection() {
                     
                     <div className="flex justify-between items-center">
                       <div className="text-sm text-primary-500">
-                        {listing.type} Opportunity
+                        {formatListingType(listing.type)} Opportunity
                       </div>
                       <button className="inline-flex items-center gap-2 text-compliance-600 font-medium hover:text-compliance-700 transition-smooth">
-                        {listing.contact ? `Contact: ${listing.contact}` : 'Learn More'}
+                        Learn More
                         <ArrowRightIcon className="w-4 h-4" />
                       </button>
                     </div>
