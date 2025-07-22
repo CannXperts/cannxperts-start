@@ -32,6 +32,7 @@ export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
     
+    console.log('Admin API: Creating listing with data:', body)
     const response = await fetch(`${REPLIT_API_URL}/admin/listings`, {
       method: 'POST',
       headers: {
@@ -41,8 +42,10 @@ export async function POST(request: NextRequest) {
     })
 
     if (!response.ok) {
+      const errorText = await response.text()
+      console.error('Main app create error:', response.status, errorText)
       return NextResponse.json(
-        { error: 'Failed to create listing' },
+        { error: `Failed to create listing: ${errorText}` },
         { status: response.status }
       )
     }

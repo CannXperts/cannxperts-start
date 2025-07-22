@@ -99,8 +99,11 @@ export default function AdminPage() {
       })
 
       if (response.ok) {
+        console.log('Listing saved successfully')
         await fetchAllListings()
         resetForm()
+      } else {
+        console.error('Failed to save listing:', response.status, await response.text())
       }
     } catch (error) {
       console.error('Failed to save listing:', error)

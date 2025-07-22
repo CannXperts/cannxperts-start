@@ -23,25 +23,29 @@ export default function MarketplaceSection() {
     async function fetchListings() {
       try {
         // Call the local Next.js API route directly
+        console.log('Fetching marketplace listings...')
         const response = await fetch('/api/marketplace?limit=6')
         
         if (response.ok) {
           const data = await response.json()
-          console.log('API Response:', data)
+          console.log('API Response received:', data)
           console.log('Data type:', typeof data, 'Length:', Array.isArray(data) ? data.length : 'Not array')
           
-          if (Array.isArray(data) && data.length > 0) {
+          if (Array.isArray(data)) {
+            console.log('Setting', data.length, 'listings')
             setListings(data)
             setError(null)
           } else {
-            console.log('No listings found in API response')
+            console.log('Data is not an array:', data)
             setListings([])
             setError(null)
           }
         } else {
           console.log('API Error - Status:', response.status)
+          const errorText = await response.text()
+          console.log('Error details:', errorText)
           setListings([])
-          setError(null)
+          setError(`API Error: ${response.status}`)
         }
       } catch (err) {
         console.error('Marketplace fetch error:', err)
