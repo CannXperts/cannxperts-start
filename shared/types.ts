@@ -18,7 +18,7 @@ export interface MarketplaceListing {
   type: 'HAVE' | 'WANT' | 'NEED';
   category: string;
   contactInfo: string;
-  isActive: boolean;
+  is_active: boolean;
   createdAt: Date;
   salesPrice?: string;
   location?: string;

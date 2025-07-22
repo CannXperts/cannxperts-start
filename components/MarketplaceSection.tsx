@@ -81,7 +81,7 @@ export default function MarketplaceSection() {
   }
 
   // Filter only active listings from API data  
-  const activeListings = listings.filter(listing => listing.isActive !== false)
+  const activeListings = listings.filter(listing => listing.is_active !== false)
 
   return (
     <section className="section-padding bg-primary-50">
