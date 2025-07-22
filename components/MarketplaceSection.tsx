@@ -26,7 +26,8 @@ export default function MarketplaceSection() {
         }
       } catch (err) {
         console.error('Network Error:', err)
-        setError(`Network error: ${err.message}`)
+        const errorMessage = err instanceof Error ? err.message : 'Unknown error'
+        setError(`Network error: ${errorMessage}`)
       } finally {
         setLoading(false)
       }
