@@ -80,8 +80,8 @@ export default function MarketplaceSection() {
     return '/api/placeholder/400/300'
   }
 
-  // Filter only active listings from API data
-  const activeListings = listings.filter(listing => listing.is_active !== false)
+  // Filter only active listings from API data  
+  const activeListings = listings.filter(listing => listing.isActive !== false)
 
   return (
     <section className="section-padding bg-primary-50">

@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const REPLIT_API_URL = 'https://compliance-connect-andy623.replit.app/api'
+const REPLIT_API_URL = 'https://compliance-connect-andy623.replit.app'
 
 export async function GET() {
   try {
-    const response = await fetch(`${REPLIT_API_URL}/admin/listings`, {
+    const response = await fetch(`${REPLIT_API_URL}/api/admin/listings`, {
       headers: {
         'Content-Type': 'application/json',
       },
@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     
     console.log('Admin API: Creating listing with data:', body)
-    const response = await fetch(`${REPLIT_API_URL}/admin/listings`, {
+    const response = await fetch(`${REPLIT_API_URL}/api/admin/listings`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
