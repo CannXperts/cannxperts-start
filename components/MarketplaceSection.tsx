@@ -20,14 +20,13 @@ export default function MarketplaceSection() {
           setError(null)
         } else {
           console.log('API Error:', response.error)
-          // For debugging - let's see what's actually happening
-          setListings([]) // Show empty state instead of error
-          setError(null) // Don't show error message
+          console.log('Full API Response:', response)
+          // Show error to help debug
+          setError(`API returned: ${response.error || 'Unknown error'}`)
         }
       } catch (err) {
         console.error('Network Error:', err)
-        setListings([]) // Show empty state instead of error
-        setError(null) // Don't show error message
+        setError(`Network error: ${err.message}`)
       } finally {
         setLoading(false)
       }

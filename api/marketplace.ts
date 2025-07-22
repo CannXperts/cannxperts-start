@@ -3,7 +3,8 @@
 
 import { MarketplaceListing, ApiResponse, PaginatedResponse } from '../shared/types';
 
-const BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://compliance-connect-andy623.replit.app';
+// Use the local Next.js API route instead of direct calls to Replit
+const BASE_URL = typeof window !== 'undefined' ? '' : process.env.NEXT_PUBLIC_API_URL || 'https://compliance-connect-andy623.replit.app';
 
 export class MarketplaceAPI {
   private static async fetch(endpoint: string, options: RequestInit = {}): Promise<Response> {
