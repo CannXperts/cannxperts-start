@@ -11,7 +11,7 @@ const CANNABIS_LISTINGS = [
     type: "HAVE",
     category: "Retail Store",
     contactInfo: "contact@cannxperts.com",
-    is_active: true,
+    isActive: true,
     createdAt: new Date('2024-12-15'),
     salesPrice: "Contact for pricing",
     location: "Eugene, Oregon",
@@ -33,7 +33,7 @@ const CANNABIS_LISTINGS = [
     type: "HAVE",
     category: "Processing Facility",
     contactInfo: "contact@cannxperts.com",
-    is_active: true,
+    isActive: true,
     createdAt: new Date('2024-12-10'),
     salesPrice: "$850,000",
     location: "Portland, Oregon",
@@ -54,7 +54,7 @@ const CANNABIS_LISTINGS = [
     type: "HAVE",
     category: "Cultivation",
     contactInfo: "contact@cannxperts.com",
-    is_active: true,
+    isActive: true,
     createdAt: new Date('2024-12-05'),
     salesPrice: "$2,400,000",
     location: "Southern Oregon",
@@ -75,7 +75,7 @@ const CANNABIS_LISTINGS = [
     type: "HAVE",
     category: "Receivership",
     contactInfo: "receivership@cannxperts.com",
-    is_active: true,
+    isActive: true,
     createdAt: new Date('2024-11-28'),
     salesPrice: "Sealed bid process",
     location: "Bend, Oregon",
@@ -96,7 +96,7 @@ const CANNABIS_LISTINGS = [
     type: "HAVE",
     category: "Laboratory Equipment",
     contactInfo: "equipment@cannxperts.com",
-    is_active: true,
+    isActive: true,
     createdAt: new Date('2024-11-20'),
     salesPrice: "$425,000",
     location: "Oregon (statewide delivery)",
@@ -120,7 +120,7 @@ export async function GET(request: NextRequest) {
     console.log('Total listings available:', CANNABIS_LISTINGS.length)
     
     // Filter active listings and apply limit
-    const activeListings = CANNABIS_LISTINGS.filter(listing => listing.is_active)
+    const activeListings = CANNABIS_LISTINGS.filter(listing => listing.isActive !== false)
     const limitedListings = activeListings.slice(0, limit)
     
     console.log('Returning', limitedListings.length, 'active listings')
