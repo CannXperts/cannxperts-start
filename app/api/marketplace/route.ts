@@ -8,27 +8,28 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const limit = searchParams.get('limit') || '10'
     
-    console.log('Website API: Fetching from main app...')
+    console.log('Website API: Attempting to fetch from main app...')
+    console.log('Target URL:', `${REPLIT_API_URL}/api/marketplace?limit=${limit}`)
+    
+    // Try with minimal headers first
     const response = await fetch(`${REPLIT_API_URL}/api/marketplace?limit=${limit}`, {
       method: 'GET',
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'User-Agent': 'CannXperts-Website/1.0',
-      },
+      cache: 'no-cache'
     })
 
     console.log('Response status:', response.status)
-    console.log('Response headers:', Object.fromEntries(response.headers.entries()))
-
+    console.log('Response ok:', response.ok)
+    console.log('Response type:', response.type)
+    
     if (!response.ok) {
       const errorText = await response.text()
       console.error('Main app API error:', response.status, errorText)
+      
       throw new Error(`HTTP error! status: ${response.status} - ${errorText}`)
     }
 
     const data = await response.json()
-    console.log('Website API: Received', data.length, 'listings from main app')
+    console.log('Website API: Successfully received', data.length, 'listings from main app')
     
     return NextResponse.json(data)
   } catch (error) {
