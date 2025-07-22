@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { MarketplaceAPI, formatPrice, formatListingType, getListingImageUrl } from '../api/marketplace'
+import { formatPrice, formatListingType, getListingImageUrl } from '../api/marketplace'
 import { MarketplaceListing } from '../shared/types'
 import { BuildingOfficeIcon, MapPinIcon, TagIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
 
@@ -14,20 +14,24 @@ export default function MarketplaceSection() {
     const fetchFeaturedListings = async () => {
       setLoading(true)
       try {
-        const response = await MarketplaceAPI.getFeaturedListings(6)
-        if (response.success && response.data) {
-          setListings(response.data)
+        // Call the local Next.js API route directly
+        const response = await fetch('/api/marketplace?limit=6')
+        
+        if (response.ok) {
+          const data = await response.json()
+          setListings(data || [])
           setError(null)
         } else {
-          console.log('API Error:', response.error)
-          console.log('Full API Response:', response)
-          // Show error to help debug
-          setError(`API returned: ${response.error || 'Unknown error'}`)
+          console.log('API Error - Status:', response.status)
+          // Don't set error, just show empty state
+          setListings([])
+          setError(null)
         }
       } catch (err) {
         console.error('Network Error:', err)
-        const errorMessage = err instanceof Error ? err.message : 'Unknown error'
-        setError(`Network error: ${errorMessage}`)
+        // Don't set error, just show empty state
+        setListings([])
+        setError(null)
       } finally {
         setLoading(false)
       }
