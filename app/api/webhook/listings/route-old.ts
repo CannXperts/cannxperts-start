@@ -1,34 +1,31 @@
-// Website webhook endpoint to receive updates from main app
+// Webhook endpoint to receive listing updates from main app
 import { NextRequest, NextResponse } from 'next/server'
 import fs from 'fs/promises'
 import path from 'path'
 
-const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET || 'cannxperts-sync'
+const WEBHOOK_SECRET = process.env.WEBHOOK_SECRET || 'cannxperts-secret-key'
 
 export async function POST(request: NextRequest) {
   try {
+    const body = await request.json()
+    
+    // Verify webhook secret
     const providedSecret = request.headers.get('x-webhook-secret')
     if (providedSecret !== WEBHOOK_SECRET) {
-      console.log('Webhook: Invalid secret provided')
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const body = await request.json()
-    const { listings, source, timestamp } = body
-
+    // Update the embedded listings file
+    const { listings } = body
+    
     if (!Array.isArray(listings)) {
       return NextResponse.json({ error: 'Invalid listings data' }, { status: 400 })
     }
 
-    console.log(`[webhook] Received ${listings.length} listings from ${source} at ${timestamp}`)
-
-    // Update marketplace route file with new listings
-    const marketplaceRoutePath = path.join(process.cwd(), 'app', 'api', 'marketplace', 'route.ts')
-    
-    const newContent = `// Cannabis business listings - updated from main app
+    // Generate new marketplace route file with updated data
+    const listingsCode = `// Auto-updated cannabis business listings
 import { NextRequest, NextResponse } from 'next/server'
 
-// Last updated: ${timestamp} from ${source}
 const CANNABIS_LISTINGS = ${JSON.stringify(listings, null, 2)};
 
 export async function GET(request: NextRequest) {
@@ -36,10 +33,10 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     const limit = parseInt(searchParams.get('limit') || '10')
     
-    console.log('Website API: Serving synced cannabis business listings')
+    console.log('Website API: Serving auto-updated cannabis business listings')
     console.log('Total listings available:', CANNABIS_LISTINGS.length)
     
-    const activeListings = CANNABIS_LISTINGS.filter(listing => listing.isActive !== false)
+    const activeListings = CANNABIS_LISTINGS.filter(listing => listing.is_active)
     const limitedListings = activeListings.slice(0, limit)
     
     console.log('Returning', limitedListings.length, 'active listings')
@@ -56,10 +53,12 @@ export async function GET(request: NextRequest) {
   }
 }
 `
+
+    // Update the marketplace route file
+    const marketplaceRoutePath = path.join(process.cwd(), 'app', 'api', 'marketplace', 'route.ts')
+    await fs.writeFile(marketplaceRoutePath, listingsCode)
     
-    await fs.writeFile(marketplaceRoutePath, newContent)
-    
-    console.log(`[webhook] Updated website with ${listings.length} listings from main app`)
+    console.log(`Webhook: Updated ${listings.length} listings`)
     
     return NextResponse.json({ 
       success: true, 
@@ -68,7 +67,7 @@ export async function GET(request: NextRequest) {
     })
     
   } catch (error) {
-    console.error('[webhook] Error updating listings:', error)
+    console.error('Webhook error:', error)
     return NextResponse.json(
       { error: 'Failed to update listings' },
       { status: 500 }
