@@ -151,7 +151,7 @@ export class MarketplaceAPI {
   // Get featured listings (for website homepage)
   static async getFeaturedListings(limit = 6): Promise<ApiResponse<MarketplaceListing[]>> {
     try {
-      const response = await this.fetch(`/api/marketplace/featured?limit=${limit}`);
+      const response = await this.fetch(`/api/marketplace?limit=${limit}`);
       
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -160,7 +160,7 @@ export class MarketplaceAPI {
       const data = await response.json();
       return {
         success: true,
-        data: data
+        data: data.slice(0, limit) // Get first few listings as featured
       };
     } catch (error) {
       return {
