@@ -1,4 +1,5 @@
 import { ShieldCheckIcon, UserGroupIcon, DocumentCheckIcon, BuildingOfficeIcon, ScaleIcon, ClipboardDocumentCheckIcon } from '@heroicons/react/24/outline'
+import MarketplaceSection from '../components/MarketplaceSection'
 
 export default function HomePage() {
   const services = [
@@ -251,6 +252,9 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Marketplace Section */}
+      <MarketplaceSection />
 
       {/* Newsletter Section */}
       <section className="section-padding compliance-gradient">
