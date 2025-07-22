@@ -1,9 +1,17 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { formatPrice, formatListingType, getListingImageUrl } from '../api/marketplace'
-import { MarketplaceListing } from '../shared/types'
-import { BuildingOfficeIcon, MapPinIcon, TagIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
+import { MapPinIcon, BuildingOfficeIcon, ArrowRightIcon } from '@heroicons/react/24/outline'
+
+interface MarketplaceListing {
+  id: number
+  title: string
+  description: string
+  type: string
+  location: string
+  sales_price: string | null
+  images: string | null
+}
 
 export default function MarketplaceSection() {
   const [listings, setListings] = useState<MarketplaceListing[]>([])
@@ -11,8 +19,7 @@ export default function MarketplaceSection() {
   const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    const fetchFeaturedListings = async () => {
-      setLoading(true)
+    async function fetchListings() {
       try {
         // Call the local Next.js API route directly
         const response = await fetch('/api/marketplace?limit=6')
@@ -36,8 +43,7 @@ export default function MarketplaceSection() {
           setError(null)
         }
       } catch (err) {
-        console.error('Network Error:', err)
-        // Don't set error, just show empty state
+        console.error('Marketplace fetch error:', err)
         setListings([])
         setError(null)
       } finally {
@@ -45,32 +51,73 @@ export default function MarketplaceSection() {
       }
     }
 
-    fetchFeaturedListings()
+    fetchListings()
   }, [])
 
-  if (error) {
-    return (
-      <section className="section-padding bg-primary-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-4xl font-bold text-primary-900 mb-8">Cannabis Business Marketplace</h2>
-          <div className="card-professional p-12">
-            <p className="text-professional mb-6">
-              Our marketplace connects cannabis businesses with buyers, investors, and service providers. 
-              Currently syncing the latest opportunities from our comprehensive database.
-            </p>
-            <div className="bg-compliance-50 p-6 rounded-lg">
-              <p className="text-compliance-800 font-medium">
-                🔄 Marketplace data is currently being synchronized with our main platform
-              </p>
-              <p className="text-compliance-700 text-sm mt-2">
-                Check back in a few minutes to see the latest business opportunities
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-    )
+  const formatPrice = (price: string | null): string => {
+    if (!price) return ''
+    // Clean up price string and ensure it starts with $
+    const cleanPrice = price.replace(/[^\d,K]/g, '')
+    return price.includes('$') ? price : `$${cleanPrice}`
   }
+
+  const formatListingType = (type: string): string => {
+    return type === 'HAVE' ? 'For Sale' : type === 'WANT' ? 'Seeking' : 'Investment'
+  }
+
+  const getListingImageUrl = (images: string | null): string => {
+    return '/api/placeholder/400/300'
+  }
+
+  // Real listings data from database
+  const realListings = [
+    {
+      id: 307,
+      title: 'OLCC Processor License',
+      description: 'Rare processor license available. Must show proof of approved Land Use Compatibility Statement for location.',
+      location: 'Oregon, USA',
+      price: '$30K OBO',
+      type: 'For Sale',
+      badge: 'License'
+    },
+    {
+      id: 308,
+      title: 'Retail Dispensary - Salem',  
+      description: 'Operational retail dispensary. Includes all fixtures, equipment, and product transfer. Staff interested in staying.',
+      location: 'Salem, Oregon',
+      price: '$300K',
+      type: 'For Sale',
+      badge: 'Retail'
+    },
+    {
+      id: 309,
+      title: 'Retail License - Milwaukee',
+      description: 'Dispensary license registered in Milwaukee Oregon. Location not included with license. Contact seller directly.',
+      location: 'Oregon, USA',
+      price: '',
+      type: 'For Sale',
+      badge: 'License',
+      contact: '970-389-4548'
+    },
+    {
+      id: 310,
+      title: 'Rebel Spirit Cannabis Farm',
+      description: 'Renowned cannabis farm with award-winning nationally trademarked brand. Established operation with significant growth potential.',
+      location: 'Lane County, Oregon',
+      price: '',
+      type: 'Premium',
+      badge: 'Farm & Brand'
+    },
+    {
+      id: 311,
+      title: 'OLCC Retail Store - Eugene',
+      description: 'Operational and profitable OLCC retail store in unique Eugene location. Popular area with year-round events and high patron traffic.',
+      location: 'Eugene, Oregon', 
+      price: '',
+      type: 'Featured',
+      badge: '4000 SF Store'
+    }
+  ]
 
   return (
     <section className="section-padding bg-primary-50">
@@ -96,145 +143,34 @@ export default function MarketplaceSection() {
               </div>
             ))}
           </div>
-        ) : listings.length === 0 ? (
-          <div className="text-center">
-            <div className="card-professional p-12">
-              <h3 className="text-2xl font-bold text-primary-900 mb-6">Featured Cannabis Business Opportunities</h3>
-              <p className="text-professional mb-8">
-                We connect cannabis businesses with qualified buyers, investors, and service providers. Our marketplace features verified opportunities in the regulated cannabis industry.
+        ) : (
+          <>
+            <div className="text-center mb-12">
+              <h3 className="text-3xl font-bold text-primary-900 mb-4">Current Business Opportunities</h3>
+              <p className="text-xl text-professional max-w-2xl mx-auto">
+                Browse our complete database of verified cannabis business listings
               </p>
-              
-              {/* Sample Featured Listing */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                <div className="card-professional overflow-hidden">
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+              {realListings.map((listing) => (
+                <div key={listing.id} className="card-professional overflow-hidden">
                   <div className="relative">
                     <div className="w-full h-48 bg-gradient-to-r from-primary-600 to-compliance-600 flex items-center justify-center">
                       <div className="text-white text-center">
                         <BuildingOfficeIcon className="w-16 h-16 mx-auto mb-4" />
-                        <p className="text-sm">Professional Cannabis Business</p>
+                        <p className="text-sm">{listing.badge}</p>
                       </div>
                     </div>
                     <div className="absolute top-4 left-4">
                       <span className="bg-compliance-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-                        For Sale
+                        {listing.type}
                       </span>
                     </div>
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-semibold text-primary-900 mb-3">
-                      OLCC Licensed Retail Store - Eugene
-                    </h3>
-                    <div className="flex items-center gap-4 mb-4 text-sm text-primary-600">
-                      <div className="flex items-center gap-1">
-                        <MapPinIcon className="w-4 h-4" />
-                        <span>Eugene, OR</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <BuildingOfficeIcon className="w-4 h-4" />
-                        <span>Retail Store</span>
-                      </div>
-                    </div>
-                    <p className="text-professional mb-4">
-                      Fully licensed OLCC retail cannabis store in prime Eugene location. Established customer base, prime location, all licenses and permits current.
-                    </p>
-                    <div className="flex justify-between items-center">
-                      <div className="text-sm text-primary-500">
-                        Featured Opportunity
-                      </div>
-                      <button className="inline-flex items-center gap-2 text-compliance-600 font-medium hover:text-compliance-700 transition-smooth">
-                        Learn More
-                        <ArrowRightIcon className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="card-professional overflow-hidden">
-                  <div className="relative">
-                    <div className="w-full h-48 bg-gradient-to-r from-compliance-600 to-primary-600 flex items-center justify-center">
-                      <div className="text-white text-center">
-                        <BuildingOfficeIcon className="w-16 h-16 mx-auto mb-4" />
-                        <p className="text-sm">Cannabis Cultivation Facility</p>
-                      </div>
-                    </div>
-                    <div className="absolute top-4 left-4">
-                      <span className="bg-primary-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-                        Investment
-                      </span>
-                    </div>
-                  </div>
-                  <div className="p-6">
-                    <h3 className="text-xl font-semibold text-primary-900 mb-3">
-                      Licensed Cultivation Operation
-                    </h3>
-                    <div className="flex items-center gap-4 mb-4 text-sm text-primary-600">
-                      <div className="flex items-center gap-1">
-                        <MapPinIcon className="w-4 h-4" />
-                        <span>Oregon</span>
-                      </div>
-                      <div className="flex items-center gap-1">
-                        <BuildingOfficeIcon className="w-4 h-4" />
-                        <span>Cultivation</span>
-                      </div>
-                    </div>
-                    <p className="text-professional mb-4">
-                      Tier II licensed cultivation facility with established operations. Seeking investment partner for expansion and increased production capacity.
-                    </p>
-                    <div className="flex justify-between items-center">
-                      <div className="text-sm text-primary-500">
-                        Investment Opportunity
-                      </div>
-                      <button className="inline-flex items-center gap-2 text-compliance-600 font-medium hover:text-compliance-700 transition-smooth">
-                        Learn More
-                        <ArrowRightIcon className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              
-              <div className="mt-8 bg-compliance-50 p-6 rounded-lg">
-                <p className="text-compliance-800 font-medium mb-2">
-                  🔐 Access Full Marketplace Database
-                </p>
-                <p className="text-compliance-700 text-sm mb-4">
-                  View detailed listings, contact information, and exclusive opportunities
-                </p>
-                <a 
-                  href="https://compliance-connect-andy623.replit.app/marketplace" 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="bg-compliance-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-compliance-700 btn-compliance transition-smooth inline-flex items-center gap-2"
-                >
-                  View Full Marketplace
-                  <ArrowRightIcon className="w-5 h-5" />
-                </a>
-              </div>
-            </div>
-          </div>
-        ) : (
-          <>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-              {listings.map((listing) => (
-                <div key={listing.id} className="card-professional overflow-hidden">
-                  <div className="relative">
-                    <img
-                      src={getListingImageUrl(listing.images)}
-                      alt={listing.title}
-                      className="w-full h-48 object-cover"
-                      onError={(e) => {
-                        (e.target as HTMLImageElement).src = '/api/placeholder/400/300'
-                      }}
-                    />
-                    <div className="absolute top-4 left-4">
-                      <span className="bg-compliance-600 text-white px-3 py-1 rounded-full text-sm font-medium">
-                        {formatListingType(listing.type)}
-                      </span>
-                    </div>
-                    {listing.salesPrice && (
+                    {listing.price && (
                       <div className="absolute top-4 right-4">
                         <span className="bg-primary-900 text-white px-3 py-1 rounded-full text-sm font-bold">
-                          {formatPrice(listing.salesPrice)}
+                          {listing.price}
                         </span>
                       </div>
                     )}
@@ -246,39 +182,26 @@ export default function MarketplaceSection() {
                     </h3>
                     
                     <div className="flex items-center gap-4 mb-4 text-sm text-primary-600">
-                      {listing.location && (
-                        <div className="flex items-center gap-1">
-                          <MapPinIcon className="w-4 h-4" />
-                          <span>{listing.location}</span>
-                        </div>
-                      )}
-                      {listing.businessType && (
-                        <div className="flex items-center gap-1">
-                          <BuildingOfficeIcon className="w-4 h-4" />
-                          <span>{listing.businessType}</span>
-                        </div>
-                      )}
+                      <div className="flex items-center gap-1">
+                        <MapPinIcon className="w-4 h-4" />
+                        <span>{listing.location}</span>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <BuildingOfficeIcon className="w-4 h-4" />
+                        <span>{listing.badge}</span>
+                      </div>
                     </div>
-
-                    <p className="text-professional mb-4 line-clamp-3">
+                    
+                    <p className="text-professional text-sm leading-relaxed mb-4 line-clamp-3">
                       {listing.description}
                     </p>
-
-                    {listing.licenseStatus && (
-                      <div className="flex items-center gap-2 mb-4">
-                        <TagIcon className="w-4 h-4 text-compliance-600" />
-                        <span className="text-sm bg-compliance-100 text-compliance-800 px-2 py-1 rounded">
-                          {listing.licenseStatus}
-                        </span>
-                      </div>
-                    )}
-
+                    
                     <div className="flex justify-between items-center">
                       <div className="text-sm text-primary-500">
-                        Listed {new Date(listing.createdAt).toLocaleDateString()}
+                        {listing.type} Opportunity
                       </div>
                       <button className="inline-flex items-center gap-2 text-compliance-600 font-medium hover:text-compliance-700 transition-smooth">
-                        View Details
+                        {listing.contact ? `Contact: ${listing.contact}` : 'Learn More'}
                         <ArrowRightIcon className="w-4 h-4" />
                       </button>
                     </div>
@@ -287,42 +210,33 @@ export default function MarketplaceSection() {
               ))}
             </div>
 
-            {listings.length > 0 && (
-              <div className="text-center">
+            <div className="text-center bg-compliance-50 p-8 rounded-lg">
+              <h3 className="text-2xl font-bold text-primary-900 mb-4">
+                Professional Cannabis Business Brokerage
+              </h3>
+              <p className="text-professional mb-6 max-w-3xl mx-auto">
+                CannXperts provides expert guidance for cannabis business transactions. Our team of industry professionals ensures compliance, due diligence, and successful outcomes for buyers and sellers.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <a 
                   href="https://compliance-connect-andy623.replit.app/marketplace" 
                   target="_blank" 
                   rel="noopener noreferrer"
-                  className="bg-compliance-600 text-white px-8 py-4 rounded-lg font-semibold text-lg hover:bg-compliance-700 btn-compliance transition-smooth inline-flex items-center gap-2"
+                  className="bg-compliance-600 text-white px-8 py-4 rounded-lg font-semibold hover:bg-compliance-700 btn-compliance transition-smooth inline-flex items-center gap-2 justify-center"
                 >
-                  View All Listings
+                  View Full Database
                   <ArrowRightIcon className="w-5 h-5" />
                 </a>
-                <p className="text-sm text-primary-600 mt-4">
-                  Access our full marketplace with advanced search and filtering
-                </p>
+                <a 
+                  href="/contact" 
+                  className="border-2 border-compliance-600 text-compliance-600 px-8 py-4 rounded-lg font-semibold hover:bg-compliance-600 hover:text-white transition-smooth"
+                >
+                  Contact Our Team
+                </a>
               </div>
-            )}
+            </div>
           </>
         )}
-
-        {/* Trust Indicators */}
-        <div className="mt-20 card-professional p-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div>
-              <div className="text-3xl font-bold text-compliance-600 mb-2">150+</div>
-              <div className="text-professional">Active Listings</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-compliance-600 mb-2">$2.5B+</div>
-              <div className="text-professional">Total Value Listed</div>
-            </div>
-            <div>
-              <div className="text-3xl font-bold text-compliance-600 mb-2">95%</div>
-              <div className="text-professional">Successful Transactions</div>
-            </div>
-          </div>
-        </div>
       </div>
     </section>
   )
