@@ -11,9 +11,14 @@ export async function GET(request: NextRequest) {
     console.log('Website API: Attempting to fetch from main app...')
     console.log('Target URL:', `${REPLIT_API_URL}/api/marketplace?limit=${limit}`)
     
-    // Try with minimal headers first
+    // Try with proper headers to match successful test
     const response = await fetch(`${REPLIT_API_URL}/api/marketplace?limit=${limit}`, {
       method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'User-Agent': 'CannXperts-Website/1.0'
+      },
       cache: 'no-cache'
     })
 
