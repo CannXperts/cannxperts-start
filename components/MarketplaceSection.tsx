@@ -116,8 +116,17 @@ export default function MarketplaceSection() {
               </p>
             </div>
             
+            {/* Debug Info */}
+            <div className="bg-yellow-100 border border-yellow-400 rounded p-4 mb-8 text-sm">
+              <p><strong>Debug Info:</strong></p>
+              <p>Total listings received: {listings.length}</p>
+              <p>Active listings: {activeListings.length}</p>
+              <p>Loading: {loading.toString()}</p>
+              <p>Error: {error || 'None'}</p>
+            </div>
+            
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
-              {activeListings.map((listing) => (
+              {activeListings.length > 0 ? activeListings.map((listing) => (
                 <div key={listing.id} className="card-professional overflow-hidden">
                   <div className="relative">
                     <div className="w-full h-48 bg-gradient-to-r from-primary-600 to-compliance-600 flex items-center justify-center">
@@ -171,7 +180,22 @@ export default function MarketplaceSection() {
                     </div>
                   </div>
                 </div>
-              ))}
+              )) : (
+                <div className="col-span-full bg-red-100 border border-red-400 rounded-lg p-8 text-center">
+                  <h3 className="text-xl font-bold text-red-800 mb-4">No Listings Found</h3>
+                  <p className="text-red-700 mb-4">
+                    Unable to load marketplace listings. This could be due to:
+                  </p>
+                  <ul className="text-red-700 text-left max-w-md mx-auto">
+                    <li>• API connection issues</li>
+                    <li>• Database not responding</li>
+                    <li>• All listings marked as inactive</li>
+                  </ul>
+                  <p className="text-red-700 mt-4">
+                    <strong>Check browser console for detailed error messages.</strong>
+                  </p>
+                </div>
+              )}
             </div>
 
             <div className="text-center bg-compliance-50 p-8 rounded-lg">
