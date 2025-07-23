@@ -5,13 +5,27 @@ import { MapPinIcon, BuildingOfficeIcon, ArrowRightIcon } from '@heroicons/react
 
 interface MarketplaceListing {
   id: number
+  userId?: number
   title: string
   description: string
   type: string
+  category?: string
   location: string
-  sales_price: string | null
-  images: string | null
+  contactInfo?: string
+  salesPrice?: string | number | null
+  sales_price?: string | null
+  isActive?: boolean
   is_active?: boolean
+  createdAt?: Date | string
+  businessType?: string
+  licenseType?: string
+  licenseStatus?: string
+  equipmentIncluded?: boolean
+  fixturesIncluded?: boolean
+  productTransfer?: boolean
+  leaseAssumable?: boolean
+  staffWillStay?: boolean
+  sourceUrl?: string
 }
 
 export default function MarketplaceSection() {
@@ -59,11 +73,17 @@ export default function MarketplaceSection() {
     fetchListings()
   }, [])
 
-  const formatPrice = (price: string | null): string => {
+  const formatPrice = (listing: MarketplaceListing): string => {
+    const price = listing.salesPrice || listing.sales_price
     if (!price) return ''
-    // Clean up price string and ensure it starts with $
-    const cleanPrice = price.replace(/[^\d,K]/g, '')
-    return price.includes('$') ? price : `$${cleanPrice}`
+    if (typeof price === 'number') return `$${price.toLocaleString()}`
+    if (typeof price === 'string') {
+      if (price.toLowerCase().includes('contact')) return price
+      if (price.toLowerCase().includes('sealed bid')) return price
+      if (price.includes('$')) return price
+      return `$${price}`
+    }
+    return ''
   }
 
   const formatListingType = (type: string): string => {
@@ -81,7 +101,7 @@ export default function MarketplaceSection() {
   }
 
   // Filter only active listings from API data  
-  const activeListings = listings.filter(listing => listing.is_active !== false)
+  const activeListings = listings.filter(listing => (listing.isActive !== false && listing.is_active !== false))
 
   return (
     <section className="section-padding bg-primary-50">
@@ -140,10 +160,10 @@ export default function MarketplaceSection() {
                         {formatListingType(listing.type)}
                       </span>
                     </div>
-                    {listing.sales_price && (
+                    {formatPrice(listing) && (
                       <div className="absolute top-4 right-4">
                         <span className="bg-primary-900 text-white px-3 py-1 rounded-full text-sm font-bold">
-                          {formatPrice(listing.sales_price)}
+                          {formatPrice(listing)}
                         </span>
                       </div>
                     )}
