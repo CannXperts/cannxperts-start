@@ -1,137 +1,94 @@
-// Next.js API route with embedded cannabis business listings data
 import { NextRequest, NextResponse } from 'next/server'
 
-// Real cannabis business listings from CannXperts database
-const CANNABIS_LISTINGS = [
+// Fallback cannabis business listings for when main app is unavailable
+const FALLBACK_LISTINGS = [
   {
-    id: 311,
-    userId: 1,
-    title: "FEATURED LISTING: OLCC LICENSED RETAIL STORE - EUGENE - NEW PRICE! BRING BEST OFFER!",
-    description: "A fantastic opportunity to own a fully operational cannabis retail store in Eugene, Oregon. This OLCC licensed dispensary comes with everything needed to start operations immediately. The business includes all equipment, fixtures, inventory, and established customer base. Located in a high-traffic area with excellent visibility and parking. Perfect for experienced cannabis entrepreneurs looking to expand or new operators wanting a turnkey solution.",
+    id: 1,
+    title: "OLCC Licensed Retail Store - Eugene",
+    description: "Fully operational cannabis retail store in Eugene, Oregon. OLCC licensed dispensary with equipment, fixtures, inventory, and established customer base.",
     type: "HAVE",
-    category: "Retail Store",
-    contactInfo: "contact@cannxperts.com",
-    isActive: true,
-    createdAt: new Date('2024-12-15'),
-    salesPrice: "Contact for pricing",
     location: "Eugene, Oregon",
-    businessType: "Retail Dispensary",
-    licenseType: "OLCC Retail",
-    licenseStatus: "Active",
-    equipmentIncluded: true,
-    fixturesIncluded: true,
-    productTransfer: true,
-    leaseAssumable: true,
-    staffWillStay: true,
-    sourceUrl: "https://cannxperts.com/shop/p/featured-listing-olcc-licensed-retail-store-eugene-new-price-bring-best-offer"
+    sales_price: "Contact for pricing",
+    is_active: true
   },
   {
-    id: 312,
-    userId: 1,
-    title: "OLCC LICENSED CANNABIS PROCESSING FACILITY - TURNKEY OPERATION",
-    description: "Fully equipped OLCC licensed processing facility ready for immediate operation. This state-of-the-art facility includes extraction equipment, packaging lines, testing capabilities, and all necessary compliance infrastructure. Located in a secure industrial complex with excellent transportation access. Perfect for established processors looking to expand capacity or new operators wanting a complete processing solution.",
+    id: 2,
+    title: "Cannabis Processing Facility - Portland", 
+    description: "Fully equipped OLCC licensed processing facility with extraction equipment, packaging lines, testing capabilities, and compliance infrastructure.",
     type: "HAVE",
-    category: "Processing Facility",
-    contactInfo: "contact@cannxperts.com",
-    isActive: true,
-    createdAt: new Date('2024-12-10'),
-    salesPrice: "$850,000",
-    location: "Portland, Oregon",
-    businessType: "Processing Facility",
-    licenseType: "OLCC Processing",
-    licenseStatus: "Active",
-    equipmentIncluded: true,
-    fixturesIncluded: true,
-    productTransfer: false,
-    leaseAssumable: true,
-    staffWillStay: false
+    location: "Portland, Oregon", 
+    sales_price: "$850,000",
+    is_active: true
   },
   {
-    id: 313,
-    userId: 1,
-    title: "CANNABIS CULTIVATION FARM - 50,000 SQ FT GREENHOUSE OPERATION",
-    description: "Premier cannabis cultivation facility featuring 50,000 square feet of state-of-the-art greenhouse space. This OLCC licensed operation includes automated irrigation systems, climate control, security infrastructure, and processing areas. Located on 10 acres with room for expansion. Currently producing premium flower and pre-rolls with established distribution channels. Ideal for serious cultivators looking for a large-scale operation.",
+    id: 3,
+    title: "Cannabis Cultivation Farm - 50,000 Sq Ft",
+    description: "Premier cannabis cultivation facility featuring 50,000 square feet of greenhouse space with automated systems and processing areas.",
     type: "HAVE",
-    category: "Cultivation",
-    contactInfo: "contact@cannxperts.com",
-    isActive: true,
-    createdAt: new Date('2024-12-05'),
-    salesPrice: "$2,400,000",
     location: "Southern Oregon",
-    businessType: "Cultivation Facility",
-    licenseType: "OLCC Producer",
-    licenseStatus: "Active",
-    equipmentIncluded: true,
-    fixturesIncluded: true,
-    productTransfer: true,
-    leaseAssumable: false,
-    staffWillStay: true
+    sales_price: "$2,400,000", 
+    is_active: true
   },
   {
-    id: 314,
-    userId: 1,
-    title: "DISTRESSED CANNABIS RETAIL LOCATION - RECEIVERSHIP OPPORTUNITY",
-    description: "Prime cannabis retail location available through receivership proceedings. This formerly successful dispensary is located in a high-traffic area with excellent demographics and established customer base. Property includes all necessary retail fixtures, security systems, and OLCC compliant infrastructure. Represents an excellent opportunity for experienced operators to acquire a premium location at below-market pricing.",
+    id: 4,
+    title: "Distressed Cannabis Retail Location",
+    description: "Prime cannabis retail location available through receivership proceedings. High-traffic area with established customer base.",
     type: "HAVE",
-    category: "Receivership",
-    contactInfo: "receivership@cannxperts.com",
-    isActive: true,
-    createdAt: new Date('2024-11-28'),
-    salesPrice: "Sealed bid process",
     location: "Bend, Oregon",
-    businessType: "Retail Dispensary",
-    licenseType: "OLCC Retail (transferable)",
-    licenseStatus: "Suspended - Transferable",
-    equipmentIncluded: true,
-    fixturesIncluded: true,
-    productTransfer: false,
-    leaseAssumable: true,
-    staffWillStay: false
+    sales_price: "Sealed bid process",
+    is_active: true
   },
   {
-    id: 315,
-    userId: 1,
-    title: "CANNABIS TESTING LABORATORY EQUIPMENT - COMPLETE LAB SETUP",
-    description: "Complete cannabis testing laboratory equipment package from a recently closed OLCC licensed testing facility. Package includes HPLC systems, gas chromatography equipment, microscopes, sample prep equipment, and all necessary testing infrastructure. All equipment has been recently calibrated and maintained. Perfect for new testing labs or existing facilities looking to expand capacity. Can be sold as complete package or individual components.",
+    id: 5,
+    title: "Testing Laboratory Equipment",
+    description: "Complete cannabis testing laboratory equipment package including chromatography systems, analytical instruments, and compliance software.",
     type: "HAVE",
-    category: "Laboratory Equipment",
-    contactInfo: "equipment@cannxperts.com",
-    isActive: true,
-    createdAt: new Date('2024-11-20'),
-    salesPrice: "$425,000",
-    location: "Oregon (statewide delivery)",
-    businessType: "Testing Laboratory",
-    licenseType: "Equipment Only",
-    licenseStatus: "N/A",
-    equipmentIncluded: true,
-    fixturesIncluded: false,
-    productTransfer: false,
-    leaseAssumable: false,
-    staffWillStay: false
+    location: "Oregon",
+    sales_price: "$425,000",
+    is_active: true
   }
-];
+]
 
 export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     const limit = parseInt(searchParams.get('limit') || '10')
     
-    console.log('Website API: Serving embedded cannabis business listings')
-    console.log('Total listings available:', CANNABIS_LISTINGS.length)
+    // Try to fetch from main app API first (when webhook is configured)
+    const mainAppUrl = process.env.MAIN_APP_API_URL || 'https://compliance-connect-andy623.replit.app'
     
-    // Filter active listings and apply limit
-    const activeListings = CANNABIS_LISTINGS.filter(listing => listing.isActive !== false)
+    try {
+      console.log('Attempting to fetch from main app:', `${mainAppUrl}/api/marketplace`)
+      const response = await fetch(`${mainAppUrl}/api/marketplace?limit=${limit}`, {
+        headers: {
+          'Authorization': `Bearer ${process.env.API_TOKEN || ''}`,
+          'Content-Type': 'application/json'
+        },
+        cache: 'no-store'
+      })
+      
+      if (response.ok) {
+        const mainAppListings = await response.json()
+        if (Array.isArray(mainAppListings) && mainAppListings.length > 0) {
+          console.log(`Successfully fetched ${mainAppListings.length} listings from main app`)
+          return NextResponse.json(mainAppListings)
+        }
+      }
+    } catch (mainAppError) {
+      console.log('Main app not available, using fallback listings')
+    }
+    
+    // Use fallback listings
+    const activeListings = FALLBACK_LISTINGS.filter(listing => listing.is_active !== false)
     const limitedListings = activeListings.slice(0, limit)
     
-    console.log('Returning', limitedListings.length, 'active listings')
-    
+    console.log(`Returning ${limitedListings.length} fallback cannabis business listings`)
     return NextResponse.json(limitedListings)
-  } catch (error) {
-    console.error('API error:', error)
     
-    const errorMessage = error instanceof Error ? error.message : 'Unknown error'
+  } catch (error) {
+    console.error('Marketplace API error:', error)
     return NextResponse.json(
-      { error: `Failed to fetch marketplace data: ${errorMessage}` },
+      { error: 'Failed to load marketplace listings' },
       { status: 500 }
     )
   }
